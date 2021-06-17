@@ -66,6 +66,7 @@ class ViewController: UITableViewController {
   }()
 
   private var searchText = String()
+  private var filtered: [String] = []
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -75,6 +76,7 @@ class ViewController: UITableViewController {
     navigationItem.searchController = search
     navigationItem.hidesSearchBarWhenScrolling = false
     search.searchBar.delegate = self
+    self.filtered = data
 
     tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
   }
@@ -91,12 +93,12 @@ class ViewController: UITableViewController {
 extension ViewController {
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return data.count
+    return filtered.count
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-    cell.textLabel?.highlightText(value: data[indexPath.row], highlight: searchText)
+    cell.textLabel?.highlightText(value: filtered[indexPath.row], highlight: searchText)
     cell.textLabel?.numberOfLines = 0
     return cell
   }
@@ -109,6 +111,9 @@ extension ViewController {
 extension ViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     self.searchText = searchText
+    let searchText = searchText.lowercased()
+    let result = data.filter({ $0.lowercased().contains(searchText)})
+    self.filtered = result.isEmpty ? data : result
     tableView.reloadData()
   }
 
@@ -132,8 +137,8 @@ extension UILabel {
     let attributedText = NSMutableAttributedString(string: value)
     let range = (value as NSString).range(of: highlight, options: .caseInsensitive)
     let strokeText: [NSAttributedString.Key: Any] = [
-      .backgroundColor: UIColor.systemBlue,
-      .foregroundColor: UIColor.white
+      .backgroundColor: UIColor.yellow,
+      .foregroundColor: UIColor.black
     ]
     attributedText.addAttributes(strokeText, range: range)
     self.attributedText = attributedText
