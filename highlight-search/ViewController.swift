@@ -9,48 +9,19 @@ import UIKit
 
 class ViewController: UITableViewController {
 
-  let data = ["choose random index from array swift",
-              "pick random a number from array swift",
-              "select random element from array in swift",
-              "how to select a random item from a n array swift",
-              "how to randomly select an item from an array in swift",
-              "swift array random element",
-              "random array selection swift",
-              "swift get a random element from array",
-              "how to pick random element from aray swift",
-              "select random value from array swift",
-              "random pick from array swift",
-              "how to make a random array in swift",
-              "pick random element from array swift",
-              "getting random item from array swift",
-              "swift get random item from array",
-              "how to select random values from array in swift",
-              "swift pick random number from array",
-              "random value from array swift",
-              "random pick from array swift",
-              "swift choose 電話 value from array",
-              "how to pick random value from array in swift",
-              "picking a random number from a array in swift",
-              "get random number of things from an array swift",
-              "choose random value from array swift",
-              "random pick array swift",
-              "pick randomly from an array swift",
-              "pick a random number from array swift",
-              "using an カタカナ to select random values from array in swift",
-              "randomly get an ement from an array in swift",
-              "how to get a random item from an array swift",
-              "pick a random entry in an array swift",
-              "return random element from array swift",
-              "randomize elements in an array swift",
-              "randomly select from an array swift",
-              "how to get a random element from an array in javas",
-              "how to pick random element from an array swift",
-              "Print random element from array of array in swift",
-              "swift pick random element in array",
-              "return random index of array swift",
-              "choose 天気 array element swift",
-              "swift random element of array select",
-              "how to sample randomly from array 漢字"]
+  let data = [
+    "Act 1 Scene 1: Verona, A public place",
+    "Act 1 Scene 2: Capulet's mansion",
+    "Act 1 Scene 3: A room in Capulet's mansion",
+    "Act 1 Scene 4: A street outside Capulet's mansion",
+    "Act 1 Scene 5: The Great Hall in Capulet's mansion",
+    "Act 2 Scene 1: Outside Capulet's mansion",
+    "Act 2 Scene 2: Capulet's orchard",
+    "Act 2 Scene 3: Outside Friar Lawrence's cell",
+    "Act 2 Scene 4: A street in Verona",
+    "Act 2 Scene 5: Capulet's mansion",
+    "Act 2 Scene 6: Friar Lawrence's cell"
+  ]
 
   let search: UISearchController = {
     let s = UISearchController()
@@ -79,6 +50,7 @@ class ViewController: UITableViewController {
     self.filtered = data
 
     tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    tableView.tableFooterView = UIView()
   }
 
   override init(style: UITableView.Style) {
