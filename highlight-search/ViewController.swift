@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
 class ViewController: UITableViewController {
 
@@ -38,6 +40,7 @@ class ViewController: UITableViewController {
 
   private var searchText = String()
   private var filtered: [String] = []
+  private let disposeBag = DisposeBag()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -46,11 +49,24 @@ class ViewController: UITableViewController {
     search.searchBar.isTranslucent = false
     navigationItem.searchController = search
     navigationItem.hidesSearchBarWhenScrolling = false
-    search.searchBar.delegate = self
-    self.filtered = data
 
     tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     tableView.tableFooterView = UIView()
+
+    search.searchBar
+      .rx.text
+      .orEmpty
+      .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+      .distinctUntilChanged()
+      // .filter { !$0.isEmpty }
+      .subscribe(onNext: { [unowned self] query in
+        self.searchText = query
+        let searchTxt = query.lowercased()
+        let result = self.data.filter { $0.lowercased().contains(searchTxt) }
+        self.filtered = result.isEmpty ? data : result
+        tableView.reloadData()
+      })
+      .disposed(by: disposeBag)
   }
 
   override init(style: UITableView.Style) {
@@ -77,25 +93,6 @@ extension ViewController {
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-  }
-}
-
-extension ViewController: UISearchBarDelegate {
-  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    self.searchText = searchText
-    let searchText = searchText.lowercased()
-    let result = data.filter({ $0.lowercased().contains(searchText)})
-    self.filtered = result.isEmpty ? data : result
-    tableView.reloadData()
-  }
-
-  func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-    print("EndEditing.")
-  }
-
-  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    self.searchText = ""
-    tableView.reloadData()
   }
 }
 
